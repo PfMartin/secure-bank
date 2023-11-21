@@ -2,39 +2,18 @@
 
 Example project for developing a banking api with golang, grpc and postgres
 
-## Database Setup
+## Database
 
-### Postgres Container
+### Setup
 
-- Start the container
-
-```zsh
-docker run --name secure-bank-db -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=Jahnel01 -d postgres:16-alpine
-```
-
-- Connect to the container
-- Password is not required when connecting locally
+- Install [golang-migrate](#markdown-header-golang-migrate)
 
 ```zsh
-docker exec -it secure-bank-db psql -U root
-```
+cd db
 
-- Check if it works
-
-```zsh
-select now();
-```
-
-- Exit the container by exiting `psql`
-
-```bash
-\q
-```
-
-- Access logs of the container
-
-```zsh
-docker logs secure-bank-db
+make create-container
+make createdb
+make migrate-up
 ```
 
 ### Table Plus installation
@@ -85,13 +64,8 @@ migrate create --ext sql --dir db/migration --seq init_schema
 - Add the reverting commands to the `down`-migration
 
 ```sql
-DROP TABLE IF EXISTS entries;
-DROP TABLE IF EXISTS transfers;
-DROP TABLE IF EXISTS accounts;
+DROP TABLE IF EXISTS entries CASCADE;
+DROP TABLE IF EXISTS transfers CASCADE;
+DROP TABLE IF EXISTS accounts CASCADE;
 ```
 
-- Apply the migration
-
-```zsh
-migrate --path db/migration --database "postgresql://root:secret@localhost:5432/secure_bank?sslmode=disable" --verbose up
-```
