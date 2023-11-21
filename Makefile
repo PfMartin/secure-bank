@@ -14,10 +14,13 @@ destroy-container:
 	docker stop secure-bank-db && docker rm secure-bank-db	
 
 migrate-down:
-	 migrate --path migration --database "postgresql://root:secret@localhost:5432/secure_bank?sslmode=disable" --verbose down
+	 migrate --path db/migration --database "postgresql://root:secret@localhost:5432/secure_bank?sslmode=disable" --verbose down
 
 migrate-up:
-	 migrate --path migration --database "postgresql://root:secret@localhost:5432/secure_bank?sslmode=disable" --verbose up
+	 migrate --path db/migration --database "postgresql://root:secret@localhost:5432/secure_bank?sslmode=disable" --verbose up
+
+sqlc:
+	sqlc generate
 
 start-container:
 	docker start secure-bank-db
@@ -25,4 +28,4 @@ start-container:
 tail-container-logs:
 	docker logs -f secure-bank-db
 
-.PHONY: connect-to-database createdb create-container destroy-container dropdb migrate-down migrate-up start-container tail-container-logs   
+.PHONY: connect-to-database createdb create-container destroy-container dropdb migrate-down migrate-up start-container sqlc tail-container-logs   

@@ -34,7 +34,7 @@ sudo apt install tableplus
 
 ### golang-migrate
 
-#### Installation
+#### Install golang-migrate
 
 [Installation Manual](https://www.geeksforgeeks.org/how-to-install-golang-migrate-on-ubuntu/)
 
@@ -67,4 +67,20 @@ migrate create --ext sql --dir db/migration --seq init_schema
 DROP TABLE IF EXISTS entries CASCADE;
 DROP TABLE IF EXISTS transfers CASCADE;
 DROP TABLE IF EXISTS accounts CASCADE;
+```
+
+## CRUD Operations
+
+### sqlc
+
+- Fully supports postgres
+- Translates SQL to ideomatic golang std library for sql
+
+#### Install sqlc
+
+```zsh
+sudo snap install sqlc
+
+sqlc version
+sqlc help
 ```
