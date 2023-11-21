@@ -6,7 +6,7 @@ Example project for developing a banking api with golang, grpc and postgres
 
 ### Setup
 
-- Install [golang-migrate](#markdown-header-golang-migrate)
+- Install `golang-migrate`
 
 ```zsh
 cd db
@@ -68,4 +68,3 @@ DROP TABLE IF EXISTS entries CASCADE;
 DROP TABLE IF EXISTS transfers CASCADE;
 DROP TABLE IF EXISTS accounts CASCADE;
 ```
-
