@@ -1,6 +1,9 @@
 create-container:
 	docker run --name secure-bank-db -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d postgres:16-alpine
 
+start-container:
+	docker start secure-bank-db
+
 destroy-container:
 	docker stop secure-bank-db && docker rm secure-bank-db	
 
@@ -22,4 +25,4 @@ migrate-up:
 migrate-down:
 	 migrate --path migration --database "postgresql://root:secret@localhost:5432/secure_bank?sslmode=disable" --verbose down
 
-.PHONY: create-container destroy-container tail-container-logs createdb dropdb migrate-up migrate-down
+.PHONY: create-container start-container destroy-container tail-container-logs createdb dropdb migrate-up migrate-down
