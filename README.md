@@ -6,7 +6,7 @@ Example project for developing a banking api with golang, grpc and postgres
 
 ### Setup
 
-- Install [golang-migrate](#markdown-header-golang-migrate)
+- Install `golang-migrate`
 
 ```zsh
 cd db
@@ -34,7 +34,7 @@ sudo apt install tableplus
 
 ### golang-migrate
 
-#### Installation
+#### Install golang-migrate
 
 [Installation Manual](https://www.geeksforgeeks.org/how-to-install-golang-migrate-on-ubuntu/)
 
@@ -69,3 +69,48 @@ DROP TABLE IF EXISTS transfers CASCADE;
 DROP TABLE IF EXISTS accounts CASCADE;
 ```
 
+## CRUD Operations
+
+### sqlc
+
+- Fully supports postgres
+- Translates SQL to ideomatic golang std library for sql
+
+#### Install sqlc
+
+```zsh
+sudo snap install sqlc
+
+sqlc version
+sqlc help
+```
+
+#### Configure sqlc
+
+- Initialize sqlc --> Will create a `sqlc.yaml` in your project folder
+
+```zsh
+sqlc init
+```
+
+- Add postgresql engine and the correct file paths for queries and schema
+- Remove `cloud` and `database` for using sqlc without the cloud
+
+```yml
+version: "2"
+sql:
+  - engine: "postgresql"
+    queries: "./db/query/"
+    schema: "./db/migration/"
+    gen:
+      go:
+        package: "db"
+        out: "./db/sqlc"
+        sql_package: "pgx/v5"
+        emit_json_tags: true
+        emit_prepared_queries: false
+        emit_interface: false
+        emit_exact_table_names: false
+```
+
+- Write your own queries in SQL and generate code from these queries using `sqlc generate`
