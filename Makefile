@@ -37,5 +37,10 @@ migrate-up:
 sqlc:
 	sqlc generate
 
+# ------------ #
+# Code Testing #
+# ------------ #
+test:
+	go test -v --cover ./...
 
-.PHONY: connect-to-database createdb create-container destroy-container dropdb migrate-down migrate-up start-container sqlc tail-container-logs   
+.PHONY: connect-to-database createdb create-container destroy-container dropdb migrate-down migrate-up start-container sqlc tail-container-logs test
