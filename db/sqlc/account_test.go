@@ -35,15 +35,70 @@ func TestCreateAccount(t *testing.T) {
 }
 
 func TestGetAccount(t *testing.T) {
-	created_account := createRandomAccount(t)
-	got_account, err := testQueries.GetAccount(context.Background(), created_account.ID)
-
+	createdAccount := createRandomAccount(t)
+	gotAccount, err := testQueries.GetAccount(context.Background(), createdAccount.ID)
 	require.NoError(t, err)
-	require.NotEmpty(t, got_account)
+	require.NotEmpty(t, gotAccount)
 
-	require.Equal(t, created_account.ID, got_account.ID)
-	require.Equal(t, created_account.Owner, got_account.Owner)
-	require.Equal(t, created_account.Balance, got_account.Balance)
-	require.Equal(t, created_account.Currency, got_account.Currency)
-	require.WithinDuration(t, created_account.CreatedAt.Time, got_account.CreatedAt.Time, time.Second)
+	require.Equal(t, createdAccount.ID, gotAccount.ID)
+	require.Equal(t, createdAccount.Owner, gotAccount.Owner)
+	require.Equal(t, createdAccount.Balance, gotAccount.Balance)
+	require.Equal(t, createdAccount.Currency, gotAccount.Currency)
+	require.WithinDuration(t, createdAccount.CreatedAt.Time, gotAccount.CreatedAt.Time, time.Second)
+}
+
+func TestUpdateAccount(t *testing.T) {
+	createdAccount := createRandomAccount(t)
+
+	arg := UpdateAccountParams {
+		ID: createdAccount.ID,
+		Balance: util.RandomMoney(),
+	}
+
+	updatedAccount, err := testQueries.UpdateAccount(context.Background(), arg)
+	require.NoError(t, err)
+	require.NotEmpty(t, updatedAccount)
+
+	require.Equal(t, createdAccount.ID, updatedAccount.ID)
+	require.Equal(t, createdAccount.Owner, updatedAccount.Owner)
+	require.Equal(t, arg.Balance, updatedAccount.Balance)
+	require.Equal(t, createdAccount.Currency, updatedAccount.Currency)
+	require.WithinDuration(t, createdAccount.CreatedAt.Time, updatedAccount.CreatedAt.Time, time.Second)
+}
+
+func TestDeleteAccount(t *testing.T) {
+	createdAccount := createRandomAccount(t)
+	deletedAccount, err := testQueries.DeleteAccount(context.Background(), createdAccount.ID)
+	require.NoError(t, err)
+	require.NotEmpty(t, deletedAccount)
+
+	require.Equal(t, createdAccount.ID, deletedAccount.ID)
+	require.Equal(t, createdAccount.Owner, deletedAccount.Owner)
+	require.Equal(t, createdAccount.Balance, deletedAccount.Balance)
+	require.Equal(t, createdAccount.Currency, deletedAccount.Currency)
+	require.WithinDuration(t, createdAccount.CreatedAt.Time, deletedAccount.CreatedAt.Time, time.Second)
+
+	got_account, err := testQueries.GetAccount(context.Background(), deletedAccount.ID)
+	require.Error(t, err)
+	require.EqualError(t, err, "no rows in result set")
+	require.Empty(t, got_account)
+}
+
+func TestListAccounts(t *testing.T) {
+	for i := 0; i < 10; i++ {
+		createRandomAccount(t)
+	}
+
+	arg := ListAccountsParams {
+		Limit: 5,
+		Offset: 5,
+	}
+
+	accounts, err := testQueries.ListAccounts(context.Background(), arg)
+	require.NoError(t, err)
+	require.Len(t, accounts, 5)
+
+	for _, account := range accounts {
+		require.NotEmpty(t, account)
+	}
 }
