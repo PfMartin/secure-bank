@@ -84,3 +84,33 @@ sudo snap install sqlc
 sqlc version
 sqlc help
 ```
+
+#### Configure sqlc
+
+- Initialize sqlc --> Will create a `sqlc.yaml` in your project folder
+
+```zsh
+sqlc init
+```
+
+- Add postgresql engine and the correct file paths for queries and schema
+- Remove `cloud` and `database` for using sqlc without the cloud
+
+```yml
+version: "2"
+sql:
+  - engine: "postgresql"
+    queries: "./db/query/"
+    schema: "./db/migration/"
+    gen:
+      go:
+        package: "db"
+        out: "./db/sqlc"
+        sql_package: "pgx/v5"
+        emit_json_tags: true
+        emit_prepared_queries: false
+        emit_interface: false
+        emit_exact_table_names: false
+```
+
+- Write your own queries in SQL and generate code from these queries using `sqlc generate`
