@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"database/sql"
 	"testing"
 	"time"
 
@@ -11,8 +12,8 @@ import (
 
 func createRandomAccount(t *testing.T) Account {
 	arg := CreateAccountParams{
-		Owner: util.RandomOwner(),
-		Balance: util.RandomMoney(),
+		Owner:    util.RandomOwner(),
+		Balance:  util.RandomMoney(),
 		Currency: util.RandomCurrency(),
 	}
 
@@ -44,14 +45,14 @@ func TestGetAccount(t *testing.T) {
 	require.Equal(t, createdAccount.Owner, gotAccount.Owner)
 	require.Equal(t, createdAccount.Balance, gotAccount.Balance)
 	require.Equal(t, createdAccount.Currency, gotAccount.Currency)
-	require.WithinDuration(t, createdAccount.CreatedAt.Time, gotAccount.CreatedAt.Time, time.Second)
+	require.WithinDuration(t, createdAccount.CreatedAt, gotAccount.CreatedAt, time.Second)
 }
 
 func TestUpdateAccount(t *testing.T) {
 	createdAccount := createRandomAccount(t)
 
-	arg := UpdateAccountParams {
-		ID: createdAccount.ID,
+	arg := UpdateAccountParams{
+		ID:      createdAccount.ID,
 		Balance: util.RandomMoney(),
 	}
 
@@ -63,7 +64,7 @@ func TestUpdateAccount(t *testing.T) {
 	require.Equal(t, createdAccount.Owner, updatedAccount.Owner)
 	require.Equal(t, arg.Balance, updatedAccount.Balance)
 	require.Equal(t, createdAccount.Currency, updatedAccount.Currency)
-	require.WithinDuration(t, createdAccount.CreatedAt.Time, updatedAccount.CreatedAt.Time, time.Second)
+	require.WithinDuration(t, createdAccount.CreatedAt, updatedAccount.CreatedAt, time.Second)
 }
 
 func TestDeleteAccount(t *testing.T) {
@@ -76,11 +77,11 @@ func TestDeleteAccount(t *testing.T) {
 	require.Equal(t, createdAccount.Owner, deletedAccount.Owner)
 	require.Equal(t, createdAccount.Balance, deletedAccount.Balance)
 	require.Equal(t, createdAccount.Currency, deletedAccount.Currency)
-	require.WithinDuration(t, createdAccount.CreatedAt.Time, deletedAccount.CreatedAt.Time, time.Second)
+	require.WithinDuration(t, createdAccount.CreatedAt, deletedAccount.CreatedAt, time.Second)
 
 	got_account, err := testQueries.GetAccount(context.Background(), deletedAccount.ID)
 	require.Error(t, err)
-	require.EqualError(t, err, "no rows in result set")
+	require.EqualError(t, err, sql.ErrNoRows.Error())
 	require.Empty(t, got_account)
 }
 
@@ -89,8 +90,8 @@ func TestListAccounts(t *testing.T) {
 		createRandomAccount(t)
 	}
 
-	arg := ListAccountsParams {
-		Limit: 5,
+	arg := ListAccountsParams{
+		Limit:  5,
 		Offset: 5,
 	}
 
