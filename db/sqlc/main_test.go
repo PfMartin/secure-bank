@@ -1,29 +1,32 @@
 package db
 
 import (
-	"context"
+	"database/sql"
 	"log"
 	"os"
 	"testing"
 
-	"github.com/jackc/pgx/v5"
+	_ "github.com/lib/pq"
 )
 
-const connString = "host=localhost user=root password=secret dbname=secure_bank sslmode=disable"
+// const connString = "host=localhost user=root password=secret dbname=secure_bank sslmode=disable"
+const (
+	dbDriver = "postgres"
+	dbSource = "postgresql://root:secret@localhost:5432/secure_bank?sslmode=disable"
+)
 
 var testQueries *Queries
+var testDB *sql.DB
 
 func TestMain(m *testing.M) {
-	ctx := context.Background()
+	var err error
 
-	conn, err := pgx.Connect(ctx, connString)
+	testDB, err = sql.Open(dbDriver, dbSource)
 	if err != nil {
-		log.Fatal("cannot connect to db: ", err)
+		log.Fatal("Cannot connect to db: ", err)
 	}
-	defer conn.Close(ctx)
 
-
-	testQueries = New(conn)
+	testQueries = New(testDB)
 
 	os.Exit(m.Run())
 }
