@@ -115,6 +115,8 @@ sql:
 
 - Write your own queries in SQL and generate code from these queries using `sqlc generate`
 
+## mockgen
+
 ### mockgen installation
 
 - Get the binary
@@ -137,4 +139,12 @@ which mockgen
 # ...
 export PATH="$PATH:$HOME/go/bin"
 # ...
+```
+
+### Create mocks
+
+- Set sqlc option `emit_interface` to true -> `make sqlc`
+
+```zsh
+mockgen -destination db/mock/store.go github.com/PfMartin/secure-bank/db/sqlc Store
 ```
