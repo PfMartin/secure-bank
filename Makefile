@@ -40,6 +40,9 @@ sqlc:
 # ------------ #
 # Code Testing #
 # ------------ #
+mock:
+	mockgen -package mockdb -destination db/mock/store.go github.com/PfMartin/secure-bank/db/sqlc Store
+
 test:
 	go test -v --cover ./...
 
@@ -49,4 +52,4 @@ test:
 server:
 	go run main.go
 
-.PHONY: connect-to-database createdb create-container destroy-container dropdb migrate-down migrate-up start-container server sqlc tail-container-logs test
+.PHONY: connect-to-database createdb create-container destroy-container dropdb migrate-down migrate-up mock start-container server sqlc tail-container-logs test
