@@ -114,3 +114,27 @@ sql:
 ```
 
 - Write your own queries in SQL and generate code from these queries using `sqlc generate`
+
+### mockgen installation
+
+- Get the binary
+
+```zsh
+go install github.com/golang/mock/mockgen@vX.X.X
+```
+
+- The binary will be installed to ~/go/bin
+- Check if it is already available
+
+```zsh
+which mockgen
+```
+
+- If not available, you have add the folder to PATH
+
+```zsh
+# ~/.zshrc
+# ...
+export PATH="$PATH:$HOME/go/bin"
+# ...
+```
