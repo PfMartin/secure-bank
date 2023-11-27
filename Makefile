@@ -28,8 +28,14 @@ dropdb:
 migrate-down:
 	 migrate --path db/migration --database "postgresql://root:secret@localhost:5432/secure_bank?sslmode=disable" --verbose down
 
+migrate-down1:
+	 migrate --path db/migration --database "postgresql://root:secret@localhost:5432/secure_bank?sslmode=disable" --verbose down 1
+
 migrate-up:
 	 migrate --path db/migration --database "postgresql://root:secret@localhost:5432/secure_bank?sslmode=disable" --verbose up
+
+migrate-up1:
+	 migrate --path db/migration --database "postgresql://root:secret@localhost:5432/secure_bank?sslmode=disable" --verbose up 1
 
 # ---- #
 # SQLC #
@@ -52,4 +58,4 @@ test:
 server:
 	go run main.go
 
-.PHONY: connect-to-database createdb create-container destroy-container dropdb migrate-down migrate-up mock start-container server sqlc tail-container-logs test
+.PHONY: connect-to-database createdb create-container destroy-container dropdb migrate-down migrate-down1 migrate-up migrate-up1 mock start-container server sqlc tail-container-logs test
