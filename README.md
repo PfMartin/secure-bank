@@ -2,6 +2,26 @@
 
 Example project for developing a banking api with golang, grpc and postgres
 
+## How to generate code
+
+- Generate SQL CRUD with sqlc
+
+```zsh
+make sqlc
+```
+
+- Generate DB mock with gomock:
+
+```zsh
+make mock
+```
+
+- Create a new db migration
+
+```zsh
+migrate create -ext sql -dir db/migration -seq <migration_name>
+```
+
 ## Database
 
 ### Setup

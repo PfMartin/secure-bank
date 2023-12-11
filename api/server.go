@@ -39,14 +39,13 @@ func (server *Server) SetupRouter() {
 
 	router.POST("/users", server.createUser)
 	router.POST("/users/login", server.loginUser)
+	router.POST("/token/renew_access", server.renewAccessToken)
 
 	authRoutes := router.Group("/").Use(authMiddleware(server.tokenMaker))
 
 	authRoutes.POST("/accounts", server.createAccount)
 	authRoutes.GET("/accounts/:id", server.getAccount)
 	authRoutes.GET("/accounts", server.listAccount)
-	// TODO: Update account route
-	// TODO: Delete account route
 
 	authRoutes.POST("/transfers", server.createTransfer)
 
